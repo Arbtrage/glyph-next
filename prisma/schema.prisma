@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,11 +7,81 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+enum Plan {
+  FREE
+  BASIC
+  PREMIUM
+}
+
+model Admin {
   id        String   @id @default(uuid())
   name      String
   email     String
   password  String
+  photo     String?
   createdAt DateTime
   updatedAt DateTime
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String
+  photo     String?
+  gender    Gender?
+  plan      Plan       @default(FREE)
+  password  String
+  Audits    AuditLog[]
+  Session   Session?
+  createdAt DateTime
+  updatedAt DateTime
+}
+
+model Session {
+  id     String @id @default(uuid())
+  userId String @unique()
+  user   User   @relation(fields: [userId], references: [id])
+
+  token     String
+  createdAt DateTime
+}
+
+enum DocumentType {
+  PDF
+  DOC
+  EXCEL
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  PROCESSED
+}
+
+model Document {
+  id          String         @id @default(uuid())
+  userId      String
+  status      DocumentStatus @default(PENDING)
+  name        String
+  description String?
+  size        Int
+  type        DocumentType
+  url         String
+  createdAt   DateTime
+  updatedAt   DateTime
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  action     String
+  userId     String?
+  documentId String?
+  details    Json
+  createdAt  DateTime
+  User       User?    @relation(fields: [userId], references: [id])
 }
