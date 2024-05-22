@@ -5,7 +5,7 @@ import AdminSignIn from '@/components/template/Admin/SignIn'
 
 const Auth = () => {
     return (
-        <div className="h-screen bg-cover  bg-[url('/admin.jpg')]">
+        <div className="min-h-screen bg-cover  bg-[url('/admin.jpg')]">
             <AdminSignIn />
         </div>
     )

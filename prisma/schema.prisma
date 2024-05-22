@@ -40,13 +40,13 @@ model User {
   Session   Session?
   createdAt DateTime
   updatedAt DateTime
+  Document  Document[]
 }
 
 model Session {
-  id     String @id @default(uuid())
-  userId String @unique()
-  user   User   @relation(fields: [userId], references: [id])
-
+  id        String   @id @default(uuid())
+  userId    String   @unique()
+  user      User     @relation(fields: [userId], references: [id])
   token     String
   createdAt DateTime
 }
@@ -71,6 +71,7 @@ model Document {
   description String?
   size        Int
   type        DocumentType
+  User        User?          @relation(fields: [userId], references: [id])
   url         String
   createdAt   DateTime
   updatedAt   DateTime
